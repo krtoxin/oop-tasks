@@ -1,0 +1,15 @@
+/workspaces/lecturetask/DigitalWallet/bin/Debug/net8.0/DigitalWallet
+/workspaces/lecturetask/DigitalWallet/bin/Debug/net8.0/DigitalWallet.deps.json
+/workspaces/lecturetask/DigitalWallet/bin/Debug/net8.0/DigitalWallet.runtimeconfig.json
+/workspaces/lecturetask/DigitalWallet/bin/Debug/net8.0/DigitalWallet.dll
+/workspaces/lecturetask/DigitalWallet/bin/Debug/net8.0/DigitalWallet.pdb
+/workspaces/lecturetask/DigitalWallet/obj/Debug/net8.0/DigitalWallet.GeneratedMSBuildEditorConfig.editorconfig
+/workspaces/lecturetask/DigitalWallet/obj/Debug/net8.0/DigitalWallet.AssemblyInfoInputs.cache
+/workspaces/lecturetask/DigitalWallet/obj/Debug/net8.0/DigitalWallet.AssemblyInfo.cs
+/workspaces/lecturetask/DigitalWallet/obj/Debug/net8.0/DigitalWallet.csproj.CoreCompileInputs.cache
+/workspaces/lecturetask/DigitalWallet/obj/Debug/net8.0/DigitalWallet.sourcelink.json
+/workspaces/lecturetask/DigitalWallet/obj/Debug/net8.0/DigitalWallet.dll
+/workspaces/lecturetask/DigitalWallet/obj/Debug/net8.0/refint/DigitalWallet.dll
+/workspaces/lecturetask/DigitalWallet/obj/Debug/net8.0/DigitalWallet.pdb
+/workspaces/lecturetask/DigitalWallet/obj/Debug/net8.0/DigitalWallet.genruntimeconfig.cache
+/workspaces/lecturetask/DigitalWallet/obj/Debug/net8.0/ref/DigitalWallet.dll

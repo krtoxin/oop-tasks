@@ -1,0 +1,15 @@
+/workspaces/lecturetask/CarDealerApp/bin/Debug/net8.0/CarDealerApp
+/workspaces/lecturetask/CarDealerApp/bin/Debug/net8.0/CarDealerApp.deps.json
+/workspaces/lecturetask/CarDealerApp/bin/Debug/net8.0/CarDealerApp.runtimeconfig.json
+/workspaces/lecturetask/CarDealerApp/bin/Debug/net8.0/CarDealerApp.dll
+/workspaces/lecturetask/CarDealerApp/bin/Debug/net8.0/CarDealerApp.pdb
+/workspaces/lecturetask/CarDealerApp/obj/Debug/net8.0/CarDealerApp.GeneratedMSBuildEditorConfig.editorconfig
+/workspaces/lecturetask/CarDealerApp/obj/Debug/net8.0/CarDealerApp.AssemblyInfoInputs.cache
+/workspaces/lecturetask/CarDealerApp/obj/Debug/net8.0/CarDealerApp.AssemblyInfo.cs
+/workspaces/lecturetask/CarDealerApp/obj/Debug/net8.0/CarDealerApp.csproj.CoreCompileInputs.cache
+/workspaces/lecturetask/CarDealerApp/obj/Debug/net8.0/CarDealerApp.sourcelink.json
+/workspaces/lecturetask/CarDealerApp/obj/Debug/net8.0/CarDealerApp.dll
+/workspaces/lecturetask/CarDealerApp/obj/Debug/net8.0/refint/CarDealerApp.dll
+/workspaces/lecturetask/CarDealerApp/obj/Debug/net8.0/CarDealerApp.pdb
+/workspaces/lecturetask/CarDealerApp/obj/Debug/net8.0/CarDealerApp.genruntimeconfig.cache
+/workspaces/lecturetask/CarDealerApp/obj/Debug/net8.0/ref/CarDealerApp.dll

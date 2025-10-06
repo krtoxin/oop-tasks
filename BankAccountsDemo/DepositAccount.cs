@@ -1,11 +1,18 @@
-public class DepositAccount : BankAccount
+using System;
+
+public class DepositAccount : IBankAccount
 {
+    public string AccountNumber { get; }
+    public string Owner { get; }
+    public decimal Balance { get; private set; }
     public decimal InterestRate { get; set; }
 
     public DepositAccount(string accountNumber, string owner, decimal interestRate, decimal initialBalance = 0)
-        : base(accountNumber, owner, initialBalance)
     {
+        AccountNumber = accountNumber;
+        Owner = owner;
         InterestRate = interestRate;
+        Balance = initialBalance;
     }
 
     public void ApplyInterest()
@@ -15,17 +22,17 @@ public class DepositAccount : BankAccount
         Console.WriteLine($"Interest applied: {interest:F2}");
     }
 
-    public override void DisplayBalance()
+    public void DisplayBalance()
     {
         Console.WriteLine($"DepositAccount of {Owner}: Balance = {Balance:F2}");
     }
 
-    public override void Deposit(decimal amount)
+    public void Deposit(decimal amount)
     {
         if (amount > 0) Balance += amount;
     }
 
-    public override bool Withdraw(decimal amount)
+    public bool Withdraw(decimal amount)
     {
         if (amount > 0 && amount <= Balance)
         {

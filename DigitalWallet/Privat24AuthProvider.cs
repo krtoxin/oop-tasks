@@ -1,16 +1,17 @@
 public class Privat24AuthProvider : ILoginProvider
 {
     private readonly string _phone;
-    private readonly string _password;
+    private readonly string _passwordHash;
 
     public Privat24AuthProvider(string phone, string password)
     {
         _phone = phone;
-        _password = password;
+        _passwordHash = Hasher.Hash(password);
     }
 
     public bool Validate(string login, string password)
     {
-        return login == _phone && password == _password;
+        var inputHash = Hasher.Hash(password);
+        return login == _phone && inputHash == _passwordHash;
     }
 }

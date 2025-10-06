@@ -1,10 +1,17 @@
-public class CurrentAccount : BankAccount
+using System;
+
+public class CurrentAccount : IBankAccount
 {
+    public string AccountNumber { get; }
+    public string Owner { get; }
+    public decimal Balance { get; private set; }
     public decimal CreditLimit { get; private set; }
 
     public CurrentAccount(string accountNumber, string owner, decimal initialBalance = 0)
-        : base(accountNumber, owner, initialBalance)
     {
+        AccountNumber = accountNumber;
+        Owner = owner;
+        Balance = initialBalance;
         CreditLimit = 0;
     }
 
@@ -13,17 +20,17 @@ public class CurrentAccount : BankAccount
         if (limit >= 0) CreditLimit = limit;
     }
 
-    public override void DisplayBalance()
+    public void DisplayBalance()
     {
         Console.WriteLine($"CurrentAccount of {Owner}: Balance = {Balance:F2}, Credit Limit = {CreditLimit:F2}");
     }
 
-    public override void Deposit(decimal amount)
+    public void Deposit(decimal amount)
     {
         if (amount > 0) Balance += amount;
     }
 
-    public override bool Withdraw(decimal amount)
+    public bool Withdraw(decimal amount)
     {
         if (amount > 0 && amount <= Balance + CreditLimit)
         {

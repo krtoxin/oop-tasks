@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 public interface IDigitalWallet
 {
-    List<string> GetTransactionLog();
+    IReadOnlyList<string> GetTransactionLog();
     decimal CheckBalance();
     bool Withdraw(decimal amount);
     void Deposit(decimal amount);

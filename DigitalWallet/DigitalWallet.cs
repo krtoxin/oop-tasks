@@ -1,20 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
 
 public class DigitalWallet : IDigitalWallet
 {
     private decimal _balance;
     private readonly string _login;
-    private readonly string _passwordHash;
+    private readonly string _password; 
     private readonly List<string> _transactions = new();
     private ILoginProvider? _authProvider;
 
     public DigitalWallet(string login, string password, decimal initialBalance)
     {
         _login = login;
-        _passwordHash = Hash(password);
+        _password = password;
         _balance = initialBalance;
         _transactions.Add($"Wallet created with balance: {initialBalance}");
     }
@@ -26,14 +24,14 @@ public class DigitalWallet : IDigitalWallet
 
     private void EnsureAuthenticated()
     {
-        if (_authProvider == null || !_authProvider.Validate(_login, _passwordHash))
+        if (_authProvider == null || !_authProvider.Validate(_login, _password))
             throw new UnauthorizedAccessException("Invalid credentials");
     }
 
-    public List<string> GetTransactionLog()
+    public IReadOnlyList<string> GetTransactionLog()
     {
         EnsureAuthenticated();
-        return new List<string>(_transactions);
+        return _transactions.AsReadOnly();
     }
 
     public decimal CheckBalance()
@@ -59,12 +57,5 @@ public class DigitalWallet : IDigitalWallet
             throw new ArgumentException("Amount must be positive");
         _balance += amount;
         _transactions.Add($"Deposit: {amount}, Balance: {_balance}");
-    }
-
-     public static string Hash(string input)
-    {
-        using var sha = SHA256.Create();
-        var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(input));
-        return Convert.ToBase64String(bytes);
     }
 }

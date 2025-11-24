@@ -20,7 +20,7 @@ public class Notifier : INotifier
             var user = _users.Get(sub.UserId);
             if (user != null)
             {
-                _email.Send(user.Email, $"Нова книга в категорії {category.Name}", $"{book.Title} - {book.Author}");
+                _email.Send(user.Email, $"New book in category {category.Name}", $"{book.Title} - {book.Author}");
             }
         }
     }

@@ -18,7 +18,7 @@ public static class SqlBuilder
 public sealed class SelectBuilder<T>
 {
     private readonly SqlDialect _dialect;
-    private readonly List<(string sql, object? value)> _where = new();
+    private readonly List<(string sql, string pname, object? value)> _where = new();
     private readonly List<(string col, bool desc)> _order = new();
     private int? _skip;
     private int? _take;
@@ -31,8 +31,8 @@ public sealed class SelectBuilder<T>
         if (predicate.Body is MemberExpression me && me.Type == typeof(bool))
         {
             var col = me.Member.Name;
-            _where.Add(($"[{col}] = @p{_paramIndex}", true));
-            _paramIndex++;
+            var pname = "@p"+_paramIndex++;
+            _where.Add(($"{EscapeIdentifier(col)} = {pname}", pname, true));
             return this;
         }
         if (predicate.Body is BinaryExpression be)
@@ -48,8 +48,8 @@ public sealed class SelectBuilder<T>
                 ExpressionType.LessThanOrEqual => "<=",
                 _ => throw new NotSupportedException("Operator not supported")
             };
-            _where.Add(($"[{leftCol}] {op} @p{_paramIndex}", rightVal));
-            _paramIndex++;
+            var pname = "@p"+_paramIndex++;
+            _where.Add(($"{EscapeIdentifier(leftCol)} {op} {pname}", pname, rightVal));
             return this;
         }
         throw new NotSupportedException("Only simple comparisons supported in demo");
@@ -76,69 +76,60 @@ public sealed class SelectBuilder<T>
 
         if (_dialect == SqlDialect.SqlServer && _take.HasValue && !_skip.HasValue)
         {
-            sb.Append($"SELECT TOP(@p{_paramIndex}) * FROM [{table}] ");
-            parameters[$"@p{_paramIndex}"] = _take.Value;
-            _paramIndex++;
+            var pTop = "@p"+_paramIndex++;
+            sb.Append($"SELECT TOP({pTop}) * FROM {EscapeIdentifier(table)} ");
+            parameters[pTop] = _take.Value;
         }
         else
         {
-            sb.Append($"SELECT * FROM [{table}] ");
+            sb.Append($"SELECT * FROM {EscapeIdentifier(table)} ");
         }
 
         if (_where.Count > 0)
         {
             sb.Append("WHERE ");
             sb.Append(string.Join(" AND ", _where.Select(w => w.sql)));
-            foreach (var (sql, value) in _where)
+            foreach (var (_, pname, value) in _where)
             {
-                var pname = sql.Split('@').Last(); // pN)
-                pname = pname.TrimEnd(')', ' ', ';');
-                if (!parameters.ContainsKey("@" + pname))
-                {
-                    parameters["@" + pname] = value;
-                }
+                parameters[pname] = value;
             }
         }
 
         if (_order.Count > 0)
         {
             sb.Append(" ORDER BY ");
-            sb.Append(string.Join(", ", _order.Select(o => $"[{o.col}]" + (o.desc ? " DESC" : " ASC"))));
+            sb.Append(string.Join(", ", _order.Select(o => $"{EscapeIdentifier(o.col)}" + (o.desc ? " DESC" : " ASC"))));
         }
 
         if (_dialect == SqlDialect.PostgreSql)
         {
             if (_take.HasValue)
             {
-                sb.Append($" LIMIT @p{_paramIndex}");
-                parameters[$"@p{_paramIndex}"] = _take.Value;
-                _paramIndex++;
+                var pTake = "@p"+_paramIndex++;
+                sb.Append($" LIMIT {pTake}");
+                parameters[pTake] = _take.Value;
             }
             if (_skip.HasValue)
             {
-                sb.Append($" OFFSET @p{_paramIndex}");
-                parameters[$"@p{_paramIndex}"] = _skip.Value;
-                _paramIndex++;
+                var pSkip = "@p"+_paramIndex++;
+                sb.Append($" OFFSET {pSkip}");
+                parameters[pSkip] = _skip.Value;
             }
         }
         else 
         {
-            if (_skip.HasValue || (_skip.HasValue && _take.HasValue))
+            if (_skip.HasValue || _take.HasValue)
             {
                 if (!_order.Any()) sb.Append(" ORDER BY (SELECT 1)");
-                sb.Append($" OFFSET @p{_paramIndex} ROWS");
-                parameters[$"@p{_paramIndex}"] = _skip.GetValueOrDefault();
-                _paramIndex++;
+                var pSkip = "@p"+_paramIndex++;
+                sb.Append($" OFFSET {pSkip} ROWS");
+                parameters[pSkip] = _skip.GetValueOrDefault();
                 if (_take.HasValue)
                 {
-                    sb.Append($" FETCH NEXT @p{_paramIndex} ROWS ONLY");
-                    parameters[$"@p{_paramIndex}"] = _take.Value;
-                    _paramIndex++;
+                    var pTake = "@p"+_paramIndex++;
+                    sb.Append($" FETCH NEXT {pTake} ROWS ONLY");
+                    parameters[pTake] = _take.Value;
                 }
-            }
-            else if (_take.HasValue && _skip.HasValue == false)
-            {
-                
             }
         }
 
@@ -176,4 +167,6 @@ public sealed class SelectBuilder<T>
         MemberExpression m => m.Member.Name,
         _ => throw new NotSupportedException("Only member access supported")
     };
+
+    private string EscapeIdentifier(string name) => _dialect == SqlDialect.SqlServer ? $"[{name}]" : $"\"{name}\"";
 }
